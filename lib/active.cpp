@@ -3,12 +3,12 @@
 * strings attached and no restrictions or obligations.
 * ============================================================================
 *
-* Example of a ActiveIdle Object, using C++0x std::thread mechanisms to make it
+* Example of a Active Object, using C++0x std::thread mechanisms to make it
 * safe for thread communication.
 *
-* This was originally published at http://sites.google.com/site/kjellhedstrom2/ActiveIdle-object-with-cpp0x
-* and inspired from Herb Sutter's C++0x ActiveIdle Object
-* http://herbsutter.com/2010/07/12/effective-concurrency-prefer-using-ActiveIdle-objects-instead-of-naked-threads
+* This was originally published at http://sites.google.com/site/kjellhedstrom2/active-object-with-cpp0x
+* and inspired from Herb Sutter's C++0x Active Object
+* http://herbsutter.com/2010/07/12/effective-concurrency-prefer-using-active-objects-instead-of-naked-threads
 *
 * The code below uses JustSoftware Solutions Inc std::thread implementation
 * http://www.justsoftwaresolutions.co.uk
@@ -18,23 +18,21 @@
 * linkedin: http://linkedin.com/se/kjellkod */
 
 
-#include "active.h"
+#include "active_object/active.h"
+#include <cassert>
 
 namespace active_object {
 
-ActiveIdle::ActiveIdle( Callback idleCb, const std::chrono::milliseconds timeout )
-  : done_(false), idleCb_(idleCb), timeout_( timeout )
-{}
+Active::Active(): done_(false){}
 
-ActiveIdle::~ActiveIdle()
-{
-  Callback quit_token = std::bind(&ActiveIdle::doDone, this);
+Active::~Active() {
+  Callback quit_token = std::bind(&Active::doDone, this);
   send(quit_token); // tell thread to exit
   thd_.join();
 }
 
 // Add asynchronously a work-message to queue
-void ActiveIdle::send(Callback msg_){
+void Active::send(Callback msg_){
   mq_.push(msg_);
 }
 
@@ -42,20 +40,20 @@ void ActiveIdle::send(Callback msg_){
 // Will wait for msgs if queue is empty
 // A great explanation of how this is done (using Qt's library):
 // http://doc.qt.nokia.com/stable/qwaitcondition.html
-void ActiveIdle::run() {
+void Active::run() {
   while (!done_) {
+    // wait till job is available, then retrieve it and
+    // executes the retrieved job in this thread (background)
     Callback func;
-    if( mq_.wait_for_pop( func, timeout_ ) )
-      func();
-    else
-      idleCb_();
+    mq_.wait_and_pop(func);
+    func();
   }
 }
 
 // Factory: safe construction of object before thread start
-std::unique_ptr<ActiveIdle> ActiveIdle::createActiveIdle( Callback idleCb, const std::chrono::milliseconds timeout ){
-  std::unique_ptr<ActiveIdle> aPtr(new ActiveIdle( idleCb, timeout ));
-  aPtr->thd_ = std::thread(&ActiveIdle::run, aPtr.get());
+std::unique_ptr<Active> Active::createActive(){
+  std::unique_ptr<Active> aPtr(new Active());
+  aPtr->thd_ = std::thread(&Active::run, aPtr.get());
   return aPtr;
 }
 
