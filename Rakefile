@@ -6,7 +6,7 @@ task :default => :test
 
 task :build do
   if !FileTest::exists? BUILD_DIR + "/gtest/lib/libgtest.a"
-    sh "cd %s %% make deps" % BUILD_DIR
+    sh "cd %s && make deps" % BUILD_DIR
   end
 
   sh "cd %s && make" % BUILD_DIR
