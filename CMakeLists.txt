@@ -32,11 +32,8 @@ endif()
 
 ## Set global include paths
 set( LIBACTIVE_OBJECT_INCLUDE_DIRS
-  ${CMAKE_SOURCE_DIR}/include
-)
+  ${CMAKE_SOURCE_DIR}/include )
 include_directories( ${LIBACTIVE_OBJECT_INCLUDE_DIRS} )
-
-
 
 add_subdirectory("lib/")
 
