@@ -1,8 +1,14 @@
 from conans import ConanFile, CMake
 
 class LibActiveObjectConan(ConanFile):
+  name = "libactive_object"
+  version = "0.1"
   settings = "os", "compiler", "build_type", "arch"
   generators = "cmake"
+  ## TODO:  Allow static configurations...
+  # options = {"shared": [True, False]}
+  # default_options = "shared=True"
+  exports = "*"
 
   def config(self):
     if self.scope.dev and self.scope.build_tests:
@@ -20,3 +26,16 @@ class LibActiveObjectConan(ConanFile):
     self.run('cmake --build . %s' % cmake.build_config)
     if self.scope.dev and self.scope.build_tests:
       self.run('make unit_test')
+
+  def package(self):
+    self.copy("*.h", dst="")
+    #if self.options.shared:
+    if self.settings.os == "Macos":
+        self.copy(pattern="*.dylib", dst="lib", keep_path=False)
+    else:
+        self.copy(pattern="*.so*", dst="lib", src="lib", keep_path=False)
+    #else:
+    #    self.copy(pattern="*.a", dst="lib", src="lib", keep_path=False)
+
+  def package_info(self):
+      self.cpp_info.libs = ["active_object"]
