@@ -1,6 +1,8 @@
 
 task :default => "debug:test"
 
+@build_opts = {}
+load 'config.rb' if FileTest.readable? 'config.rb'
 
 ['Debug','Release'].each { |build_type|
   namespace build_type.downcase.to_sym do

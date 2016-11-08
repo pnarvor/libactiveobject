@@ -22,11 +22,11 @@ class LibActiveObjectConan(ConanFile):
   def build(self):
     cmake = CMake(self.settings)
     flag_build_tests = "-DBUILD_UNIT_TESTS=1" if self.scope.dev and self.scope.build_tests else ""
-    self.run('cmake "%s" %s %s' % (self.conanfile_directory, cmake.command_line, flag_build_tests))
+    self.run('cmake "%s" %s %s -DUSE_CONAN=True' % (self.conanfile_directory, cmake.command_line, flag_build_tests))
     self.run('cmake --build . %s' % cmake.build_config)
     if self.scope.dev and self.scope.build_tests:
       self.run('cp lib/libactive_object.* bin/')
-      self.run('make unit_test')
+      #self.run('make unit_test')
 
   def package(self):
     self.copy("*.h", dst="")
