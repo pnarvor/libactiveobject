@@ -20,7 +20,7 @@ task :default => "debug:test"
 
 namespace :dependencies do
   task :linux do
-    sh "sudo apt-get install -y cmake"
+    sh "sudo apt-get install -y cmake libboost-system-dev libboost-filesystem-dev libboost-thread-dev"
     sh "pip install conan"
   end
 
