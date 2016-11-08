@@ -7,16 +7,9 @@ task :default => "debug:test"
     build_dir = ENV['BUILD_DIR'] || "build-#{build_type}"
 
     task :build do
-      unless FileTest::directory? build_dir
-        FileUtils::mkdir build_dir
-        sh "cd %s && cmake -D CMAKE_BUILD_TYPE:STRING=\"%s\" -D BUILD_UNIT_TESTS:BOOL=True .." % [build_dir, build_type]
-      end
-
-      if !FileTest::exists? build_dir + "/gtest/lib/libgtest.a"
-        sh "cd %s && make deps" % build_dir
-      end
-
-      sh "cd %s && make" % build_dir
+      FileUtils::mkdir build_dir unless FileTest::directory? build_dir
+      sh "cd %s && conan install --scope build_tests=True -s build_type=%s .. --build=missing" % [build_dir, build_type]
+      sh "cd %s && conan build .." % [build_dir]
     end
 
     task :test => :build do
@@ -28,10 +21,11 @@ task :default => "debug:test"
 namespace :dependencies do
   task :linux do
     sh "sudo apt-get install -y cmake"
+    sh "pip install conan"
   end
 
   task :osx do
     sh "brew update"
-    sh "brew install cmake"
+    sh "brew install cmake conan"
   end
 end

@@ -16,7 +16,7 @@ class LibActiveObjectConan(ConanFile):
       self.options["gtest"].shared = False
 
   def imports(self):
-    self.copy("*.dll", dst="bin", src="bin") # From bin to bin
+    #self.copy("*.dll", dst="bin", src="bin") # From bin to bin
     self.copy("*.dylib*", dst="bin", src="lib") # From lib to bin
 
   def build(self):
@@ -25,6 +25,7 @@ class LibActiveObjectConan(ConanFile):
     self.run('cmake "%s" %s %s' % (self.conanfile_directory, cmake.command_line, flag_build_tests))
     self.run('cmake --build . %s' % cmake.build_config)
     if self.scope.dev and self.scope.build_tests:
+      self.run('cp lib/libactive_object.* bin/')
       self.run('make unit_test')
 
   def package(self):
