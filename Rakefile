@@ -20,6 +20,17 @@ load 'config.rb' if FileTest.readable? 'config.rb'
   end
 }
 
+namespace :conan  do
+  desc "Export as Conan package"
+  task :export => :distclean do
+    sh "conan export amarburg/testing"
+  end
+end
+
+task :distclean do
+  sh "rm -rf build-*"
+end
+
 namespace :dependencies do
   task :linux do
     sh "sudo apt-get install -y cmake libboost-system-dev libboost-filesystem-dev libboost-thread-dev"
