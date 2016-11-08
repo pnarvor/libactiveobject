@@ -3,12 +3,11 @@ from conans import ConanFile, CMake
 class LibActiveObjectConan(ConanFile):
   settings = "os", "compiler", "build_type", "arch"
   generators = "cmake"
-  default_options = "gtest:shared=False" #, "OpenSSL:shared=True"
-
 
   def config(self):
     if self.scope.dev and self.scope.build_tests:
       self.requires( "gtest/1.8.0@lasote/stable" )
+      self.options["gtest"].shared = False
 
   def imports(self):
     self.copy("*.dll", dst="bin", src="bin") # From bin to bin
