@@ -39,6 +39,6 @@ namespace :dependencies do
 
   task :osx do
     sh "brew update"
-    sh "brew install cmake conan"
+    sh "brew install conan"
   end
 end
