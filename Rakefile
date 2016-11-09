@@ -38,7 +38,28 @@ namespace :dependencies do
   end
 
   task :osx do
+    pkgs = %w(cmake conan)
     sh "brew update"
-    sh "brew install cmake conan"
+    sh "brew upgrade %s || brew install %s" % (pkgs.join(' '), pkgs.join(' '))
+
+
+    namespace :travis do
+      task :trusty => "dependencies:linux"
+
+      task :osx => "dependencies:osx" do
+    ## Technically the compiler version should be taken from Travis.yml is known
+    File.open("~/.conan/conan.conf",'w') { |f|
+      f.write <<CONAN_CONF_END
+[settings_defaults]
+arch=x86_64
+build_type=Release
+compiler=apple-clang
+compiler.libcxx=libc++
+compiler.version=7.3
+os=Macos
+CONAN_CONF_END
+    }
+      end
+    end
   end
 end
