@@ -3,23 +3,30 @@ task :default => "debug:test"
 
 @conan_opts = {}
 @conan_settings = {}
+@conan_scopes = { build_tests: 'True' }
 load 'config.rb' if FileTest.readable? 'config.rb'
 
 ['Debug','Release'].each { |build_type|
   namespace build_type.downcase.to_sym do
     build_dir = ENV['BUILD_DIR'] || "build-#{build_type}"
 
+    @conan_settings[:build_type] = build_type
     conan_opts = @conan_opts.each_pair.map { |key,val| "-o %s=%s" % [key,val] } +
-                @conan_settings.each_pair.map { |key,val| "-s %s:%s" % [key,val] }
+                @conan_settings.each_pair.map { |key,val| "-s %s=%s" % [key,val] } +
+                @conan_scopes.each_pair.map { |key,val| "--scope %s=%s" % [key,val] }
 
     task :build do
       FileUtils::mkdir build_dir unless FileTest::directory? build_dir
-      sh "cd %s && conan install --scope build_tests=True -s build_type=%s %s .. --build=missing" % [build_dir, build_type, conan_opts.join(' ')]
-      sh "cd %s && conan build .." % [build_dir]
+      chdir build_dir do
+      sh "conan install %s .. --build=missing" % [conan_opts.join(' ')]
+      sh "conan build .."
+      end
     end
 
     task :test => :build do
-      sh "cd %s && make unit_test" % build_dir
+      chdir build_dir do
+        sh "make unit_test"
+      end
     end
   end
 }
@@ -42,9 +49,9 @@ namespace :dependencies do
   end
 
   task :osx do
-    pkgs = %w(cmake conan)
     sh "brew update"
-    sh "brew upgrade %s || brew install %s" % [pkgs.join(' '), pkgs.join(' ')]
+    sh "brew upgrade cmake"
+    sh "brew install conan"
   end
 
   namespace :travis do
