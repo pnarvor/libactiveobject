@@ -34,7 +34,7 @@ task :distclean do
 end
 
 namespace :dependencies do
-  task :linux do
+  task :trusty do
     sh "sudo apt-get install -y cmake libboost-system-dev libboost-filesystem-dev libboost-thread-dev"
     sh "pip install conan"
   end
