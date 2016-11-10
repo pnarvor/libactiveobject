@@ -1,18 +1,20 @@
 
 task :default => "debug:test"
 
-@build_opts = {}
+@conan_opts = {}
+@conan_settings = {}
 load 'config.rb' if FileTest.readable? 'config.rb'
-
-p @build_opts
 
 ['Debug','Release'].each { |build_type|
   namespace build_type.downcase.to_sym do
     build_dir = ENV['BUILD_DIR'] || "build-#{build_type}"
 
+    conan_opts = @conan_opts.each_pair.map { |key,val| "-o %s=%s" % [key,val] } +
+                @conan_settings.each_pair.map { |key,val| "-s %s:%s" % [key,val] }
+
     task :build do
       FileUtils::mkdir build_dir unless FileTest::directory? build_dir
-      sh "cd %s && conan install --scope build_tests=True -s build_type=%s .. --build=missing" % [build_dir, build_type]
+      sh "cd %s && conan install --scope build_tests=True -s build_type=%s %s .. --build=missing" % [build_dir, build_type, conan_opts.join(' ')]
       sh "cd %s && conan build .." % [build_dir]
     end
 
@@ -51,7 +53,7 @@ namespace :dependencies do
       ## Technically the compiler version should be taken from Travis.yml is known
       File.open("config.rb",'w') { |f|
         f.write <<CONAN_CONF_END
-@conan_opts[:compiler] = 'apple-clang'
+@conan_settings[:compiler] = 'apple-clang'
 CONAN_CONF_END
         }
       end
