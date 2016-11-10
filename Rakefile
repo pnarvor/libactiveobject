@@ -58,8 +58,8 @@ namespace :dependencies do
     task :linux => "dependencies:trusty"
     task :osx => "dependencies:osx" do
       ## Let's see what minimal configuration I can get away with
-      mkdir "~/.conan" unless FileTest::directory? "~/.conan"
-      File.open("~/.conan/conan.conf",'w') { |f|
+      mkdir ".conan" unless FileTest::directory? ".conan"
+      File.open(".conan/conan.conf",'w') { |f|
         f.write <<CONAN_CONF_END
 compiler=apple-clang
 CONAN_CONF_END
