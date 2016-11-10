@@ -6,9 +6,11 @@ task :default => "debug:test"
 @conan_scopes = { build_tests: 'True' }
 load 'config.rb' if FileTest.readable? 'config.rb'
 
+build_root = ENV['BUILD_ROOT'] || "build"
+
 ['Debug','Release'].each { |build_type|
   namespace build_type.downcase.to_sym do
-    build_dir = ENV['BUILD_DIR'] || "build-#{build_type}"
+    build_dir = ENV['BUILD_DIR'] || "#{build_root}-#{build_type}"
 
     @conan_settings[:build_type] = build_type
     conan_opts = @conan_opts.each_pair.map { |key,val| "-o %s=%s" % [key,val] } +
