@@ -51,7 +51,7 @@ namespace :dependencies do
   task :osx do
     sh "brew update"
     sh "brew upgrade cmake"
-    sh "brew install conan"
+    sh "pip install conan"
   end
 
   namespace :travis do
