@@ -41,4 +41,18 @@ namespace :dependencies do
     sh "brew update"
     sh "brew install conan"
   end
+
+  namespace :travis do
+    task :linux => "dependencies:trusty"
+    task :osx => "dependencies:osx" do
+      ## Technically the compiler version should be taken from Travis.yml is known
+      File.open("config.rb",'w') { |f|
+        f.write <<CONAN_CONF_END
+@conan_opts[:compiler] = 'apple-clang'
+@conan_opts['compiler.version'.to_sym] = '7.3'
+CONAN_CONF_END
+        }
+      end
+    end
+
 end
