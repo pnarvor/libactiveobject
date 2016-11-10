@@ -65,7 +65,7 @@ CONAN_CONF_END
         }
         mkdir "foo"
         chdir "foo" do
-          sh "conan install .." # This will initialize .conan/conan.conf so we can override it
+          sh "conan install -s compiler='apple-clang' .." # This will initialize .conan/conan.conf so we can override it
         end
       end
     end
