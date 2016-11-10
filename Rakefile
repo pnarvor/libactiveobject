@@ -63,6 +63,10 @@ namespace :dependencies do
 @conan_settings[:compiler] = 'apple-clang'
 CONAN_CONF_END
         }
+        mkdir "foo"
+        chdir "foo" do
+          sh "conan install .." # This will initialize .conan/conan.conf so we can override it
+        end
       end
     end
 
