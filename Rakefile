@@ -76,7 +76,7 @@ namespace :dependencies do
 # CONAN_CONF_END
 #         }
 #         sh "cat $HOME/.conan/conan.conf"
-#       end
+       end
     end
 
 end
