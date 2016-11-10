@@ -4,6 +4,8 @@ task :default => "debug:test"
 @build_opts = {}
 load 'config.rb' if FileTest.readable? 'config.rb'
 
+p @build_opts
+
 ['Debug','Release'].each { |build_type|
   namespace build_type.downcase.to_sym do
     build_dir = ENV['BUILD_DIR'] || "build-#{build_type}"
@@ -40,26 +42,20 @@ namespace :dependencies do
   task :osx do
     pkgs = %w(cmake conan)
     sh "brew update"
-    sh "brew upgrade %s || brew install %s" % (pkgs.join(' '), pkgs.join(' '))
+    sh "brew upgrade %s || brew install %s" % [pkgs.join(' '), pkgs.join(' ')]
+  end
 
-
-    namespace :travis do
-      task :trusty => "dependencies:linux"
-
-      task :osx => "dependencies:osx" do
-    ## Technically the compiler version should be taken from Travis.yml is known
-    File.open("~/.conan/conan.conf",'w') { |f|
-      f.write <<CONAN_CONF_END
-[settings_defaults]
-arch=x86_64
-build_type=Release
-compiler=apple-clang
-compiler.libcxx=libc++
-compiler.version=7.3
-os=Macos
+  namespace :travis do
+    task :linux => "dependencies:trusty"
+    task :osx => "dependencies:osx" do
+      ## Technically the compiler version should be taken from Travis.yml is known
+      File.open("config.rb",'w') { |f|
+        f.write <<CONAN_CONF_END
+@conan_opts[:compiler] = 'apple-clang'
+#@conan_opts['compiler.version'.to_sym] = '7.3'
 CONAN_CONF_END
-    }
+        }
       end
     end
-  end
+
 end
