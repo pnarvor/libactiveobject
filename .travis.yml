@@ -29,3 +29,4 @@ deploy:
   script: rake conan:upload
   on:
     branch: master
+    condition: "$TRAVIS_OS_NAME" == "linux"
