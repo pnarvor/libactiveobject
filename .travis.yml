@@ -24,9 +24,10 @@ before_install:
 
 script: rake debug:test release:test
 
-deploy:
-  provider: script
-  script: rake conan:upload
-  on:
-    branch: master
-    condition: "$TRAVIS_OS_NAME" == "linux"
+## Bugger, not sure how to automate the authentication
+# deploy:
+#   provider: script
+#   script: rake conan:upload
+#   on:
+#     branch: master
+#     condition: "$TRAVIS_OS_NAME" == "linux"
