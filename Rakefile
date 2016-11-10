@@ -61,9 +61,16 @@ namespace :dependencies do
       mkdir ".conan" unless FileTest::directory? ".conan"
       File.open(".conan/conan.conf",'w') { |f|
         f.write <<CONAN_CONF_END
+[settings_defaults]
+arch=x86_64
+build_type=Release
 compiler=apple-clang
+compiler.libcxx=libc++
+compiler.version=7.3
+os=Macos
 CONAN_CONF_END
         }
+        sh "cat $HOME/.conan/conan.conf"
       end
     end
 
