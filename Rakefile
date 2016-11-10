@@ -61,6 +61,11 @@ namespace :dependencies do
       mkdir "/Users/travis/.conan" unless FileTest::directory? ".conan"
       File.open("/Users/travis/.conan/conan.conf",'w') { |f|
         f.write <<CONAN_CONF_END
+[storage]
+path: ~/.conan/data
+
+[proxies]
+
 [settings_defaults]
 arch=x86_64
 build_type=Release
