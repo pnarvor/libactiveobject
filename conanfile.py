@@ -2,7 +2,7 @@ from conans import ConanFile, CMake
 
 class LibActiveObjectConan(ConanFile):
   name = "libactive_object"
-  version = "0.1"
+  version = "master"
   settings = "os", "compiler", "build_type", "arch"
   generators = "cmake"
   ## TODO:  Allow static configurations...

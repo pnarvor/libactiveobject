@@ -36,6 +36,10 @@ namespace :conan  do
   task :export => :distclean do
     sh "conan export amarburg/testing"
   end
+
+  task :upload do
+    sh "conan upload libactive_object/master@amarburg/testing"
+  end
 end
 
 task :distclean do
@@ -56,7 +60,7 @@ namespace :dependencies do
 
   namespace :travis do
     task :linux => "dependencies:trusty"
-    task :osx => "dependencies:osx" 
+    task :osx => "dependencies:osx"
     end
 
 end
