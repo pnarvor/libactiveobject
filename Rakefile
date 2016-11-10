@@ -57,16 +57,13 @@ namespace :dependencies do
   namespace :travis do
     task :linux => "dependencies:trusty"
     task :osx => "dependencies:osx" do
-      ## Technically the compiler version should be taken from Travis.yml is known
-      File.open("config.rb",'w') { |f|
+      ## Let's see what minimal configuration I can get away with
+      mkdir "~/.conan" unless FileTest::directory? "~/.conan"
+      File.open("~/.conan/conan.conf",'w') { |f|
         f.write <<CONAN_CONF_END
-@conan_settings[:compiler] = 'apple-clang'
+compiler=apple-clang
 CONAN_CONF_END
         }
-        mkdir "foo"
-        chdir "foo" do
-          sh "conan install -s compiler='apple-clang' .." # This will initialize .conan/conan.conf so we can override it
-        end
       end
     end
 
