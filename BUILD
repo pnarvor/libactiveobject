@@ -1,5 +1,5 @@
 cc_library(
-  name = "lib_activelibrary",
+  name = "libactive_object",
   srcs = glob(['lib/**/*.cpp']),
   hdrs = glob(['active_object/*.h']),
 )
