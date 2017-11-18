@@ -23,7 +23,7 @@
 namespace active_object {
 
 ActiveIdle::ActiveIdle( Callback idleCb, const std::chrono::milliseconds timeout )
-  : done_(false), idleCb_(idleCb), timeout_( timeout )
+  : done_(false), timeout_( timeout ), idleCb_(idleCb)
 {}
 
 ActiveIdle::~ActiveIdle()
