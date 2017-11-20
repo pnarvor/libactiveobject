@@ -1,5 +1,5 @@
 
-task :default => "debug:test"
+task :default => "hunter:build"
 
 @conan_opts = {}
 @conan_settings = {}
@@ -33,36 +33,32 @@ build_root = ENV['BUILD_ROOT'] || "build"
   end
 }
 
-namespace :conan  do
-  desc "Export as Conan package"
-  task :export => :distclean do
-    sh "conan export amarburg/testing"
+namespace :hunter do
+  task :build do
+    sh "cmake -H. -B_builds -DHUNTER_STATUS_DEBUG=ON -DCMAKE_BUILD_TYPE=Release"
+    sh "cmake --build _builds --config Release"
   end
 
-  task :upload => :export do
-    sh "conan upload libactive_object/master@amarburg/testing"
+  task :test do
+    sh "cmake -H. -B_builds -DHUNTER_STATUS_DEBUG=ON -DBUILD_UNIT_TESTS=ON -DCMAKE_BUILD_TYPE=Release"
+    sh "cmake --build _builds --config Release"
+
+    sh "cd _builds && make unit_test"
   end
 end
 
+
 task :distclean do
-  sh "rm -rf build-*"
+  sh "rm -rf _builds"
 end
 
 namespace :dependencies do
   task :trusty do
-    sh "sudo apt-get install -y cmake libboost-system-dev libboost-filesystem-dev libboost-thread-dev"
-    sh "pip install conan"
+    sh "sudo apt-get install -y cmake"
   end
 
   task :osx do
     sh "brew update"
-    sh "brew upgrade cmake"
-    sh "pip install conan"
   end
-
-  namespace :travis do
-    task :linux => "dependencies:trusty"
-    task :osx => "dependencies:osx"
-    end
 
 end
