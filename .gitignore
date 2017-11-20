@@ -6,3 +6,4 @@
 build[_-]*/
 plz-out/
 .plz-cache/
+_builds/
