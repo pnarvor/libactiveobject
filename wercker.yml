@@ -1,15 +1,15 @@
 # wercker version for box creation
 box: amarburg/lsdslam-dev-host:conan-latest
 
+# wercker version for box creation
+box:
+  id: amarburg/lsdslam-dev-host:latest
+
 build:
   steps:
     - script:
-      name: Debug test
+      name: Build
       code: |
-          rake debug:test
-
-    - script:
-      name: Upload to conan.io
-      code: |
-        conan user -p "$CONAN_PASSWORD" $CONAN_USERNAME
-        conan upload "*@amarburg/testing" --confirm
+          ./fips set config linux-make-unittest
+          ./fips build
+          ./fips run activeobjectTest

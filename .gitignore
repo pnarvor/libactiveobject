@@ -4,6 +4,9 @@
 *.so
 .DS_Store
 build[_-]*/
-plz-out/
-.plz-cache/
-_builds/
+
+## fips internal directories
+.fips-*
+
+## Werkcer local storage directory
+.wercker/

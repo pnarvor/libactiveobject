@@ -1,3 +1,9 @@
 imports:
     fips-googletest:
-        git: https://github.com/mgerhardy/fips-googletest.git
+        git: https://github.com/amarburg/fips-googletest.git
+
+exports:
+  header-dirs:
+    - include/
+  modules:
+    active_object: lib/
