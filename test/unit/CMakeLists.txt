@@ -1,9 +1,10 @@
 
-add_executable( active_object_test
-                        active_idle_test.cpp )
-
-target_link_libraries( active_object_test
-                        active_object GTest::main )
+gtest_begin(activeobject)
+	fips_files(
+		active_idle_test.cpp
+	)
+	fips_deps(active_object)
+gtest_end()
 
 # Don't use ctest, instead just execture the Google test binaries
 add_custom_target( unit_test

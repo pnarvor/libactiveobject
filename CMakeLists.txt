@@ -1,11 +1,8 @@
 cmake_minimum_required(VERSION 3.5)
-include("cmake/HunterGate.cmake")
-HunterGate(
-    URL "https://github.com/ruslo/hunter/archive/v0.19.167.tar.gz"
-    SHA1 "244a13718ea2e6c0c8998d15559c7e459f615708"
-)
+get_filename_component(FIPS_ROOT_DIR "../fips" ABSOLUTE)
+include("${FIPS_ROOT_DIR}/cmake/fips.cmake")
 
-project(libactive_object)
+fips_setup(PROJECT libactive_object)
 
 # 	# A few things which are otherwise handled by Conan
 #  if( APPLE )
@@ -20,23 +17,17 @@ project(libactive_object)
 #
 # find_package(Threads)
 
-hunter_add_package(Boost COMPONENTS thread filesystem system )
 find_package(Boost COMPONENTS thread filesystem system)
 
 ## C++ flags applied to all builds
 set( CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")
 
 ## Set global include paths
-set( LIBACTIVE_OBJECT_INCLUDE_DIRS
-  ${CMAKE_SOURCE_DIR}/include )
+set( LIBACTIVE_OBJECT_INCLUDE_DIRS ${CMAKE_SOURCE_DIR}/include )
 include_directories( ${LIBACTIVE_OBJECT_INCLUDE_DIRS} )
 
-add_subdirectory("lib/")
+fips_add_subdirectory("lib/")
 
-option( BUILD_UNIT_TESTS "Build unit tests" OFF )
-if( BUILD_UNIT_TESTS )
-  hunter_add_package( GTest )
-  find_package(GTest CONFIG REQUIRED )
+fips_add_subdirectory("test/unit/")
 
-  add_subdirectory( test/unit/ )
-endif()
+fips_finish()
