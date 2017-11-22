@@ -6,4 +6,4 @@ exports:
   header-dirs:
     - include/
   modules:
-    active_object: lib/
+    active_object: .

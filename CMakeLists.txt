@@ -1,8 +1,11 @@
 cmake_minimum_required(VERSION 3.5)
-get_filename_component(FIPS_ROOT_DIR "../fips" ABSOLUTE)
-include("${FIPS_ROOT_DIR}/cmake/fips.cmake")
 
-fips_setup(PROJECT libactive_object)
+if( NOT FIPS_IMPORT )
+  get_filename_component(FIPS_ROOT_DIR "../fips" ABSOLUTE)
+  include("${FIPS_ROOT_DIR}/cmake/fips.cmake")
+
+  fips_setup(PROJECT libactive_object)
+endif()
 
 # 	# A few things which are otherwise handled by Conan
 #  if( APPLE )

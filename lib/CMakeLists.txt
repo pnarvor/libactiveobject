@@ -1,6 +1,4 @@
 
-find_package(Boost COMPONENTS thread filesystem system)
-
 include_directories(
   ${Boost_INCLUDE_DIR}
 )
