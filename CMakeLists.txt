@@ -31,8 +31,12 @@ include_directories( ${LIBACTIVE_OBJECT_INCLUDE_DIRS} )
 
 fips_add_subdirectory("lib/")
 
-fips_add_subdirectory("test/unit/")
-
 if( NOT FIPS_IMPORT )
+
+  if( FIPS_UNITTESTS )
+    message("** Will run unit tests")
+    fips_add_subdirectory( test/unit/ )
+  endif()
+
   fips_finish()
 endif()
