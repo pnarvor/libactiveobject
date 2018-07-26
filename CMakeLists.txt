@@ -1,6 +1,6 @@
-cmake_minimum_required(VERSION 3.5)
-
 if( NOT FIPS_IMPORT )
+  cmake_minimum_required(VERSION 3.5)
+
   get_filename_component(FIPS_ROOT_DIR "../fips" ABSOLUTE)
   include("${FIPS_ROOT_DIR}/cmake/fips.cmake")
 
@@ -31,6 +31,12 @@ include_directories( ${LIBACTIVE_OBJECT_INCLUDE_DIRS} )
 
 fips_add_subdirectory("lib/")
 
-fips_add_subdirectory("test/unit/")
+if( NOT FIPS_IMPORT )
 
-fips_finish()
+  if( FIPS_UNITTESTS )
+    message("** Will run unit tests")
+    fips_add_subdirectory( test/unit/ )
+  endif()
+
+  fips_finish()
+endif()
