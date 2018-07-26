@@ -1,9 +1,13 @@
 imports:
     fips-googletest:
         git: https://github.com/amarburg/fips-googletest.git
+        cond: "FIPS_UNITTESTS"
 
 exports:
   header-dirs:
     - include/
   modules:
     active_object: .
+
+defines:
+  FIPS_RTTI: true
