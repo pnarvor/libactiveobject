@@ -58,6 +58,15 @@ public:
     return true;
   }
 
+  bool pop_and_drop() {
+    std::lock_guard<std::mutex> lock(m_);
+    if(queue_.empty()){
+      return false;
+    }
+    queue_.pop();
+    return true;
+  }
+
   /// Try to retrieve, if no items, wait till an item is available and try again
   template< class Rep, class Period = std::ratio<1> >
   bool wait_for_pop(T& popped_item, const std::chrono::duration<Rep,Period> &timeout ) {
@@ -86,6 +95,12 @@ public:
     }
     popped_item=queue_.front();
     queue_.pop();
+  }
+
+  void flush() {
+    std::lock_guard<std::mutex> lock(m_);
+    std::queue<T> q;
+    queue_.swap(q);
   }
 
   bool empty() const{
