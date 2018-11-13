@@ -4,7 +4,7 @@ include_directories(
 )
 
 # build shared library.
-fips_begin_module(active_object)
+fips_begin_module(activeobject)
   fips_files(active.cpp active_idle.cpp)
   fips_libs( ${Boost_LIBRARIES} )
 fips_end_module()

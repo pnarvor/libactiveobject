@@ -7,7 +7,7 @@ exports:
   header-dirs:
     - include/
   modules:
-    active_object: .
+    activeobject: .
 
 defines:
   FIPS_RTTI: true

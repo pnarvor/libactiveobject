@@ -1,8 +1,8 @@
 
-gtest_begin(activeobject)
+gtest_begin( activeobject )
 
 	fips_src( . )
 
- 	fips_deps(active_object)
-	
+ 	fips_deps( activeobject )
+
 gtest_end()

@@ -4,7 +4,7 @@ if( NOT FIPS_IMPORT )
   get_filename_component(FIPS_ROOT_DIR "../fips" ABSOLUTE)
   include("${FIPS_ROOT_DIR}/cmake/fips.cmake")
 
-  fips_setup(PROJECT libactive_object)
+  fips_setup(PROJECT libactiveobject)
 endif()
 
 # 	# A few things which are otherwise handled by Conan
