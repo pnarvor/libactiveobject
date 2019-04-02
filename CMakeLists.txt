@@ -1,19 +1,6 @@
 cmake_minimum_required(VERSION 2.8.3)
 project(active_object)
 
-# 	# A few things which are otherwise handled by Conan
-#  if( APPLE )
-#     SET(CMAKE_INSTALL_RPATH "@executable_path/lib")
-#     set (MACOSX_RPATH ON)
-#   endif()
-#
-# 	set(EXECUTABLE_OUTPUT_PATH ${PROJECT_BINARY_DIR}/bin)
-# 	set(RUNTIME_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/bin)
-# endif()
-#
-#
-# find_package(Threads)
-
 find_package(catkin REQUIRED)
 
 catkin_package(
@@ -29,8 +16,9 @@ include_directories(
 )
 
 ## Build activeobject
-add_library(activeobject src/active.cpp src/active_idle.cpp)
+add_library(activeobject lib/active.cpp lib/active_idle.cpp)
 target_link_libraries(activeobject ${catkin_LIBRARIES})
+
 install(DIRECTORY include/${PROJECT_NAME}/
         DESTINATION ${CATKIN_PACKAGE_INCLUDE_DESTINATION})
 
