@@ -1,11 +1,5 @@
-if( NOT FIPS_IMPORT )
-  cmake_minimum_required(VERSION 3.5)
-
-  get_filename_component(FIPS_ROOT_DIR "../fips" ABSOLUTE)
-  include("${FIPS_ROOT_DIR}/cmake/fips.cmake")
-
-  fips_setup(PROJECT libactiveobject)
-endif()
+cmake_minimum_required(VERSION 2.8.3)
+project(active_object)
 
 # 	# A few things which are otherwise handled by Conan
 #  if( APPLE )
@@ -20,23 +14,27 @@ endif()
 #
 # find_package(Threads)
 
-find_package(Boost COMPONENTS thread filesystem system)
+find_package(catkin REQUIRED)
+
+catkin_package(
+        INCLUDE_DIRS include
+        LIBRARIES activeobject
+)
 
 ## C++ flags applied to all builds
-set( CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")
 
-## Set global include paths
-set( LIBACTIVE_OBJECT_INCLUDE_DIRS ${CMAKE_SOURCE_DIR}/include )
-include_directories( ${LIBACTIVE_OBJECT_INCLUDE_DIRS} )
+include_directories(
+  include
+)
 
-fips_add_subdirectory("lib/")
+## Build activeobject
+add_library(activeobject src/active.cpp src/active_idle.cpp)
+target_link_libraries(activeobject ${catkin_LIBRARIES})
+install(DIRECTORY include/${PROJECT_NAME}/
+        DESTINATION ${CATKIN_PACKAGE_INCLUDE_DESTINATION})
 
-if( NOT FIPS_IMPORT )
-
-  if( FIPS_UNITTESTS )
-    message("** Will run unit tests")
-    fips_add_subdirectory( test/unit/ )
-  endif()
-
-  fips_finish()
-endif()
+install(TARGETS activeobject
+        ARCHIVE DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
+        LIBRARY DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
+        RUNTIME DESTINATION ${CATKIN_GLOBAL_BIN_DESTINATION})
