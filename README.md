@@ -1,3 +1,3 @@
 # libactive_object
 
-[![wercker status](https://app.wercker.com/status/ce855bbf6a9236ba8856fd8955c45d35/s/master "wercker status")](https://app.wercker.com/project/byKey/ce855bbf6a9236ba8856fd8955c45d35)
+[![Build Status](https://github.drone.camhd.science/api/badges/apl-ocean-engineering/libactiveobject/status.svg)](https://github.drone.camhd.science/apl-ocean-engineering/libactiveobject)
