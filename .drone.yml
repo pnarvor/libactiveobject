@@ -9,9 +9,17 @@ platform:
 steps:
 
 - name: build-ros-melodic
-  image: amarburg/drone-ci-melodic-ros-base
+  image: amarburg/drone-ci-ros:melodic
   commands:
     - wget -O- https://gitlab.com/amarburg/ros_drone_ci/-/raw/master/bootstrap.sh | /bin/bash
+
+- name: slack
+  image: plugins/slack
+  settings:
+    webhook:
+      from_secret: slack_webhook
+  when:
+    status: [ success, failure ]
 
 #- name: trigger-github-downstream
 #  image: plugins/downstream
