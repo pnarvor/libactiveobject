@@ -28,7 +28,7 @@
 #include <memory>
 #include <chrono>
 
-#include "shared_queue.h"
+#include <active_object/shared_queue.h>
 
 // n.b. I've re-namespaced this from kjellkod not for nefarious purposes but
 // to avoid conflict (or explicitly re-using) the version in g3log

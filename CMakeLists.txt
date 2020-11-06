@@ -1,42 +1,31 @@
-if( NOT FIPS_IMPORT )
-  cmake_minimum_required(VERSION 3.5)
+cmake_minimum_required(VERSION 3.10)
+project(active_object VERSION 0.1)
 
-  get_filename_component(FIPS_ROOT_DIR "../fips" ABSOLUTE)
-  include("${FIPS_ROOT_DIR}/cmake/fips.cmake")
+find_package(Boost COMPONENTS thread filesystem system REQUIRED)
 
-  fips_setup(PROJECT libactiveobject)
-endif()
+list(APPEND active_object_headers
+    include/active_object/active.h
+    include/active_object/bounded_shared_queue.h
+    include/active_object/shared_queue.h
+)
 
-# 	# A few things which are otherwise handled by Conan
-#  if( APPLE )
-#     SET(CMAKE_INSTALL_RPATH "@executable_path/lib")
-#     set (MACOSX_RPATH ON)
-#   endif()
-#
-# 	set(EXECUTABLE_OUTPUT_PATH ${PROJECT_BINARY_DIR}/bin)
-# 	set(RUNTIME_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/bin)
-# endif()
-#
-#
-# find_package(Threads)
+add_library(active_object SHARED
+    lib/active.cpp
+    lib/active_idle.cpp
+)
+set_target_properties(active_object PROPERTIES
+    PUBLIC_HEADER "${active_object_headers}"
+)
+target_compile_features(active_object PUBLIC cxx_std_11)
+target_include_directories(active_object PUBLIC
+    $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
+    $<INSTALL_INTERFACE:include>
+)
+target_link_libraries(active_object PUBLIC
+    Boost::system
+)
 
-find_package(Boost COMPONENTS thread filesystem system)
+include(${CMAKE_CURRENT_SOURCE_DIR}/cmake/narval_installation.cmake)
+narval_install_target(active_object)
 
-## C++ flags applied to all builds
-set( CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")
 
-## Set global include paths
-set( LIBACTIVE_OBJECT_INCLUDE_DIRS ${CMAKE_SOURCE_DIR}/include )
-include_directories( ${LIBACTIVE_OBJECT_INCLUDE_DIRS} )
-
-fips_add_subdirectory("lib/")
-
-if( NOT FIPS_IMPORT )
-
-  if( FIPS_UNITTESTS )
-    message("** Will run unit tests")
-    fips_add_subdirectory( test/unit/ )
-  endif()
-
-  fips_finish()
-endif()

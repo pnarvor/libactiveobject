@@ -18,7 +18,7 @@
 * linkedin: http://linkedin.com/se/kjellkod */
 
 
-#include "active_object/active.h"
+#include <active_object/active.h>
 #include <cassert>
 
 namespace active_object {
